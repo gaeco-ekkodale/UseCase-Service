@@ -1,0 +1,36 @@
+// Copyright (c) 2025 Ekkodale GmbH. All rights reserved.
+//
+// This file is part of the gaeco platform system.
+//
+// Use of this file is governed by the terms of the license
+// in LICENSE.md at the root of this repository.
+// Unauthorized copying, modification, distribution, or use of this file,
+// via any medium, is strictly prohibited except as expressly permitted
+// under that license.
+
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+/**
+ * the error details object
+ */
+export type ProblemDetails_Error = {
+    /**
+     * the name of the error or property of the dto that caused the error
+     */
+    name?: string;
+    /**
+     * the reason for the error
+     */
+    reason?: string;
+    /**
+     * the code of the error
+     */
+    code?: string | null;
+    /**
+     * the severity of the error
+     */
+    severity?: string | null;
+};
+

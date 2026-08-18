@@ -1,0 +1,131 @@
+# Copyright (c) 2025 Ekkodale GmbH. All rights reserved.
+#
+# This file is part of the gaeco platform system.
+#
+# Use of this file is governed by the terms of the license
+# in LICENSE.md at the root of this repository.
+# Unauthorized copying, modification, distribution, or use of this file,
+# via any medium, is strictly prohibited except as expressly permitted
+# under that license.
+
+services:
+  # ==========================================================================
+  # 1. INFRASTRUCTURE SERVICES
+  # ==========================================================================
+
+  # --------------------------------------------------------------------------
+  # PostgreSQL Database for UseCaseService
+  # --------------------------------------------------------------------------
+  usecase-postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: ${USECASE_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${USECASE_POSTGRES_USER}
+      POSTGRES_DB: ${USECASE_POSTGRES_DATABASE}
+    expose:
+      - 5432
+    volumes:
+      # Long "type: bind" form so `docker compose config --no-path-resolution` keeps
+      # the ${VOLUME_BASE_PATH} source intact (short form gets mis-typed as a volume).
+      - type: bind
+        source: ${VOLUME_BASE_PATH}/usecase/postgres/
+        target: /var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-h",
+          "127.0.0.1",
+          "-d",
+          "${USECASE_POSTGRES_DATABASE}",
+          "-U",
+          "${USECASE_POSTGRES_USER}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 50
+      start_period: 30s
+
+  # ==========================================================================
+  # 2. APPLICATION SERVICES
+  # ==========================================================================
+
+  usecase-server:
+    image: ${IMAGE_BASE_PATH}/usecase-server:${USECASE_SERVER_TAG}
+    expose:
+      - 80
+    environment:
+      Keycloak__ServerUrl: https://${KEYCLOAK_SERVER_HOSTNAME}
+      Keycloak__Realm: ${KEYCLOAK_REALM}
+      Keycloak__Authority: https://${KEYCLOAK_SERVER_HOSTNAME}/realms/${KEYCLOAK_REALM}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      Database__Host: usecase-postgres
+      Database__Port: 5432
+      Database__Name: ${USECASE_POSTGRES_DATABASE}
+      Database__User: ${USECASE_POSTGRES_USER}
+      Database__Password: ${USECASE_POSTGRES_PASSWORD}
+      Kafka__Address: ${KAFKA_ADDRESS}
+      Kafka__AutoOffsetReset: ${KAFKA_AUTO_OFFSET_RESET}
+      Kafka__SessionTimeoutMs: ${KAFKA_SESSION_TIMEOUT_MS}
+      Kafka__MaxPollIntervalMs: ${KAFKA_MAX_POLL_INTERVAL_MS}
+      Kafka__Topics__UseCase: ${KAFKA_TOPICS_USECASE}
+      OpenTelemetry__OtlpEndpoint: ${OTLP_ENDPOINT}
+    networks:
+      - internal
+      - gaeco-network
+      - traefik-proxy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bash",
+          "-c",
+          "exec 3<>/dev/tcp/localhost/80 && echo -e 'GET /health HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 50
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.${STACK_NAME}-server.rule=Host(`${USECASE_SERVER_HOSTNAME}`)"
+      - "traefik.http.routers.${STACK_NAME}-server.entrypoints=https"
+      - "traefik.http.routers.${STACK_NAME}-server.tls.certresolver=letsencrypt"
+      - "traefik.http.services.${STACK_NAME}-server.loadbalancer.server.port=80"
+    depends_on:
+      usecase-postgres:
+        condition: service_healthy
+
+  usecase-client:
+    image: ${IMAGE_BASE_PATH}/usecase-client:${USECASE_CLIENT_TAG}
+    expose:
+      - 80
+    environment:
+      VITE_API_URL: https://${USECASE_SERVER_HOSTNAME}
+      VITE_MOUNT_PATH: ${MOUNT_ROUTE}
+    depends_on:
+      usecase-server:
+        condition: service_healthy
+    networks:
+      - gaeco-network
+    labels:
+      "app.mfe.id": "app-usecase"
+      "app.mfe.displayName": "UseCases"
+      "app.mfe.description": "UseCases Application"
+      "app.mfe.iconPath": "/Usecase.svg"
+      "app.mfe.entrypointPath": "/assets/remoteEntry.js"
+      "app.mfe.exposedModule": "App"
+      "app.mfe.route": "${MOUNT_ROUTE}"
+
+networks:
+  internal:
+  gaeco-network:
+    name: ${ENVIRONMENT_NETWORK}
+    external: true
+  traefik-proxy:
+    name: ${TRAEFIK_NETWORK}
+    external: true

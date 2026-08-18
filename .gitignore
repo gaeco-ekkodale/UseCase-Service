@@ -1,0 +1,217 @@
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Docker #
+##########
+.docker/
+
+# Packages #
+############
+# it's better to exclude all bin and obj folders, as they will be restored with 'dotnet restore'
+**/[Bb]in/
+**/[Oo]bj/
+**/[Ll]og/
+
+# VS Code directories
+.vscode/
+
+# Rider directory
+.idea/
+
+# User-specific files #
+#######################
+*.rsuser
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Mono Auto Generated Files #
+#############################
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# ASP.NET Scaffolding #
+#######################
+wwwroot/
+**/wwwroot/
+
+# Jekyll metadata file
+.jekyll-metadata
+
+# Visual Studio files #
+#######################
+*.pidb
+*.svclog
+*.scc
+
+# Visual Studio Code files
+.vs/
+*.vscode/
+*.user
+
+# User-specific files
+*.rsuser
+*.cache
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*_i.h
+*_p.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+*.userprefs
+*.csproj.user
+*.vbproj.user
+*.sqlproj.user
+*.pubxml
+*.pubxml.user
+*.backup.*
+*.bak
+*.tmp
+*.mdf
+*.ldf
+*.ndf
+
+# Microsoft Web Publish #
+#########################
+*.PublishSettings
+OrchardProject.Web/App_Data
+
+# Azure DevOps continuous integration #
+########################################
+*.config
+
+# But don't ignore nuget.config
+!nuget.config
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Windows Azure Build Output
+csx/
+*.build.csdef
+
+# Windows Store app package directories and files
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# Visual Studio cache/options directory
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Windows icon file
+*.ico
+
+# ASP.NET core wwwroot content
+wwwroot/
+**/wwwroot/
+
+# User-specific files
+*.rsuser
+
+# Microsoft SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# SQLite database files
+*.db
+*.db3
+*.sqlite
+*.sqlite3
+
+# Tye
+.tye/
+
+# Dependencies
+/node_modules
+
+# Generated files
+.docusaurus
+.cache-loader
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+/UseCaseService.Api/usecase-app-documentation/.gitignore
+data/
+out
+/output
+/UseCaseService.Api/usecase-app-documentation/node_modules/
+
+
+*.log
+
+/UseCaseService.Server/UseCaseService.Api/logs
+
+# TypeScript incremental build info
+**/tsconfig.tsbuildinfo
+
+# Local folders
+.local/
+
+_docker/volumes
+_docker/*.zip
+
+# Local configuration
+.env
+.env.local
+.env.*.local
+!*.example

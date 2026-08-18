@@ -1,0 +1,51 @@
+{
+  "name": "usecase",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode devlocal",
+    "build:production": "tsc && vite build --mode production",
+    "build:test": "tsc && vite build --mode test",
+    "build:development": "tsc -b && vite build --mode development",
+    "build:devlocal": "tsc -b && vite build --mode devlocal",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "generate-usecase-client": "openapi --input http://localhost:5130/swagger/v1/swagger.json --output src/api/UseCaseService --client fetch"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.3.0",
+    "@mui/material": "^7.3.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-query": "^5.40.1",
+    "material-react-table": "^2.13.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-oidc-context": "^3.2.0",
+    "react-router-dom": "^7.1.0",
+    "sonner": "^1.4.41"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "openapi-typescript-codegen": "^0.29.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}

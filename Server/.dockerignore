@@ -1,0 +1,13 @@
+bin/
+obj/
+**/bin/
+**/obj/
+*.md
+*.user
+*.suo
+*.log
+.git
+.vscode
+Dockerfile*
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets

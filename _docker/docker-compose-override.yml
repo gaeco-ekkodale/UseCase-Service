@@ -1,0 +1,40 @@
+# Copyright (c) 2025 Ekkodale GmbH. All rights reserved.
+#
+# This file is part of the gaeco platform system.
+#
+# Use of this file is governed by the terms of the license
+# in LICENSE.md at the root of this repository.
+# Unauthorized copying, modification, distribution, or use of this file,
+# via any medium, is strictly prohibited except as expressly permitted
+# under that license.
+
+# docker compose -f docker-compose.yml -f docker-compose-override.yml up -d
+name: usecase-service
+services:
+  usecase-postgres:
+    ports:
+      - ${USECASE_POSTGRES_OUTERPORT}:5432
+
+  usecase-server:
+    ports:
+      - "${USECASE_SERVER_OUTERPORT}:80"
+    environment:
+      - Keycloak__ServerUrl=http://keycloak-server:8080
+      - Keycloak__Authority=http://${KEYCLOAK_SERVER_HOSTNAME}/realms/${KEYCLOAK_REALM}
+    build:
+      context: ../Server
+      dockerfile: Api/Dockerfile
+      secrets:
+        - nugetconfig
+  usecase-client:
+    ports:
+      - "${USECASE_CLIENT_OUTERPORT}:80"
+    environment:
+      - VITE_API_URL=http://${USECASE_SERVER_HOSTNAME}
+    build:
+      context: ../Client
+      dockerfile: _docker/Dockerfile
+
+secrets:
+  nugetconfig:
+    file: ../../_docker/docker-compose-files/nuget.config
